@@ -21,9 +21,10 @@ def get_command_from_ollama(transcription):
         "documents : /Users/prateek/Documents\n"
         "downloads : /Users/prateek/Downloads\n"
         "Only return the command with no extra output, no markdown, no quotes around the command."
-        "ensure that during move and other commands file extension is specified as given in the command if text file is said in transciption then add .txt "
+        "ensure that during move and other commands file extension is specified as given in the command if text file is said in transciption then add .txt, .cpp, .pdf, .png, .jpg, .mkv, and make sure it.. "
         "when i am saying delete the content don't delete full file just delete the content."
         "if the transciption is right i am taking about write"
+        "If it is a github command my user name is Ragnarok04 and SSH key is SHA256:IK+lzexpDuDg2ciD/UVrvwdBt6MNNiX3b8mW101nxAo and gmail is prateekrathi0410@gmail.com"
     )
 
     response = ollama.chat(

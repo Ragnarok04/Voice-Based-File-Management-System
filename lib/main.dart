@@ -1046,36 +1046,19 @@ class _FileManagerHomePageState extends State<FileManagerHomePage> {
           final text = await _fetchTranscription();
           if (text == null) return;
 
-          // 2) If the user said something about Git, branch into Git land:
-          final lower = text.toLowerCase();
-          if (lower.contains('git') ||
-              lower.contains('push') ||
-              lower.contains('commit')) {
-            // <-- you need to implement this in your State
-            final gitResult = await _executeGitCommand(text);
-            if (gitResult != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Git: ${gitResult['command']} → ${gitResult['output']}',
-                  ),
-                  duration: Duration(seconds: 4),
-                ),
-              );
-            }
-          } else {
-            // 3) Otherwise, do your existing file commands:
-            final cmd = await _executeTranscription();
-            if (cmd == null) return;
+          // 2) Convert & execute
+          final cmd = await _executeTranscription();
+          if (cmd == null) return;
 
-            // refresh your tree
-            await fetchStructure(currentFolder);
-            await fetchAllFiles();
+          // 3) Refresh your file list to reflect filesystem changes
+          await fetchStructure(currentFolder);
 
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('File cmd: $cmd')));
-          }
+          await fetchAllFiles();
+
+          // 4) (Optional) show feedback
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ran command: $cmd')),
+          );
         },
         child: const Icon(Icons.mic),
         tooltip: 'Record & Execute',

@@ -1,1 +1,1 @@
- GET push origin main
+ Push this project to my GitHub account
