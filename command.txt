@@ -1,1 +1,1 @@
-git add . && git commit -m "Push this project to my GitHub account" && git push origin master --set-upstream origin/master --key="path/to/SSH/key" -u Ragnarok04@github.com
+git add . && git commit -m "Push this project to my GitHub account" && git push origin main

@@ -24,8 +24,13 @@ def get_command_from_ollama(transcription):
         "ensure that during move and other commands file extension is specified as given in the command if text file is said in transciption then add .txt, .cpp, .pdf, .png, .jpg, .mkv, and make sure it.. "
         "when i am saying delete the content don't delete full file just delete the content."
         "if the transciption is right i am taking about write"
-        "If it is a github command my user name is Ragnarok04 and SSH key is SHA256:IK+lzexpDuDg2ciD/UVrvwdBt6MNNiX3b8mW101nxAo and gmail is prateekrathi0410@gmail.com"
-    )
+        "If it's a GitHub command:\n"
+        "- Username: Ragnarok04\n"
+        "- Email: prateekrathi0410@gmail.com\n"
+        "- Use SSH (SHA256:IK+lzexpDuDg2ciD/UVrvwdBt6MNNiX3b8mW101nxAo)\n"
+        "- DO NOT include --key or SSH key flags in the command\n"
+        "- Use simple git commands like: git add ., git commit -m '...', git push origin main\n"
+        )
 
     response = ollama.chat(
         model="llama3",
