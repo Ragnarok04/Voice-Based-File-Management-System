@@ -50,6 +50,54 @@ def replace_paths(command):
         command = command.replace(f"{folder}/", f"{full_path}/")
     return command
 
+
+def setup_ssh_agent():
+    # 1) start ssh-agent and capture its output
+    print("Starting ssh-agent…")
+    proc = subprocess.run(
+        ['ssh-agent', '-s'], 
+        shell=False, 
+        capture_output=True, 
+        text=True
+    )
+    if proc.returncode != 0:
+        print("Failed to start ssh-agent")
+        return False
+
+    # 2) parse and export SSH_AGENT_PID and SSH_AUTH_SOCK
+    for line in proc.stdout.splitlines():
+        if line.startswith("SSH_"):
+            # e.g. "SSH_AUTH_SOCK=/tmp/ssh-XYZ; export SSH_AUTH_SOCK;"
+            pair = line.split(';')[0]
+            k, v = pair.split('=', 1)
+            os.environ[k] = v
+
+    # 3) look for either id_rsa or id_ed25519
+    home = os.path.expanduser("~")
+    candidates = [
+        os.path.join(home, ".ssh", "id_rsa"),
+        os.path.join(home, ".ssh", "id_ed25519")
+    ]
+    keyfile = next((k for k in candidates if os.path.exists(k)), None)
+    if not keyfile:
+        print("No SSH key found in ~/.ssh (tried id_rsa and id_ed25519).")
+        return False
+
+    # 4) add it to the agent
+    print(f"Adding SSH key: {keyfile}")
+    add = subprocess.run(
+        ['ssh-add', keyfile], 
+        capture_output=True, 
+        text=True
+    )
+    if add.returncode != 0:
+        print("Error adding SSH key:", add.stderr.strip())
+        return False
+
+    print("SSH key added successfully.")
+    return True
+
+
 def execute_command(command):
     print(f"Executing: {command}")
     try:
@@ -73,6 +121,9 @@ if __name__ == "__main__":
         with open("command.txt", "w", encoding="utf-8") as file:
             file.write(command)
 
-        execute_command(command)
+        if setup_ssh_agent():
+            execute_command(command)
+        else:
+            print("SSH agent setup failed. Command not executed.")
     except Exception as e:
         print(f"Error: {e}")
