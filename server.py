@@ -205,5 +205,56 @@ def execute_transcription_route():
     except subprocess.CalledProcessError as e:
         return jsonify({"error": f"Execution failed: {e}"}), 500
 
+
+# new
+
+@app.route('/execute-git', methods=['POST'])
+def execute_git():
+    repo_path = 'https://github.com/Ragnarok04/flutter_application_1'  # or wherever your repo is checked out
+    # 1) Record & transcribe (reuse your demmo.py)
+    try:
+        subprocess.run(["python", "demmo.py"], check=True)
+        with open("transcription.txt", encoding="utf-8") as f:
+            transcription = f.read().strip()
+    except Exception as e:
+        return jsonify({"error": f"Transcription failed: {e}"}), 500
+
+    # 2) Ask Ollama for Git commands
+    prompt = (
+        "Convert the following user request into a series of Windows git CLI commands.\n"
+        f"User request: '{transcription}'\n"
+        "Assume you are already inside the repository folder. "
+        "Only return commands separated by '&&', no explanations."
+    )
+    resp = ollama.chat(
+        model=OLLAMA_MODEL,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    git_cmds = resp["message"]["content"].strip().strip('`')
+
+    # 3) Execute in the repo folder
+    try:
+        result = subprocess.run(
+            git_cmds,
+            shell=True,
+            cwd=repo_path,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=True
+        )
+        output = result.stdout
+        return jsonify({
+            "transcription": transcription,
+            "git_commands": git_cmds,
+            "output": output
+        })
+    except subprocess.CalledProcessError as e:
+        return jsonify({
+            "transcription": transcription,
+            "git_commands": git_cmds,
+            "error": e.stdout or str(e)
+        }), 500
+    
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000, debug=True)

@@ -228,26 +228,6 @@ class _FileManagerHomePageState extends State<FileManagerHomePage> {
 
   @override
   @override
-  List<FileNode> searchInTree(List<FileNode> nodes, String query) {
-    List<FileNode> results = [];
-
-    for (var node in nodes) {
-      if (node.isFolder) {
-        // search in children
-        results.addAll(searchInTree(node.children, query));
-      } else if (node.name.toLowerCase().contains(query)) {
-        results.add(node);
-      }
-    }
-
-    return results;
-  }
-
-  List<FileNode> get searchedFiles {
-    if (searchQuery.isEmpty || rootNode == null) return [];
-    return searchInTree(rootNode!.children, searchQuery);
-  }
-
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
@@ -476,21 +456,6 @@ class _FileManagerHomePageState extends State<FileManagerHomePage> {
     }
   }
 
-  Future<Map<String, dynamic>?> _executeGitCommand(String text) async {
-    final uri = Uri.parse('http://localhost:8000/execute-git');
-    final resp = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'text': text}),
-    );
-    if (resp.statusCode == 200) {
-      return jsonDecode(resp.body) as Map<String, dynamic>;
-    } else {
-      debugPrint('Git execution error: ${resp.body}');
-      return null;
-    }
-  }
-
   /// 2. Calls Flask `/execute-transcription` to run execute.py
   Future<String?> _executeTranscription() async {
     final uri = Uri.parse('http://localhost:8000/execute-transcription');
@@ -499,6 +464,26 @@ class _FileManagerHomePageState extends State<FileManagerHomePage> {
       return jsonDecode(resp.body)['command'] as String;
     } else {
       debugPrint('Execution error: ${resp.body}');
+      return null;
+    }
+  }
+
+  Future<Map<String, String>?> _executeGitCommand(String transcript) async {
+    final uri = Uri.parse('http://localhost:8000/git-push');
+    // you can pass the raw transcript if you want the server to craft its own
+    final resp = await http.post(
+      uri,
+      body: jsonEncode({'text': transcript}),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (resp.statusCode == 200) {
+      final data = jsonDecode(resp.body);
+      return {
+        'command': data['command'] as String,
+        'output': data['output'] as String,
+      };
+    } else {
+      debugPrint('Git error: ${resp.body}');
       return null;
     }
   }
@@ -1027,13 +1012,9 @@ class _FileManagerHomePageState extends State<FileManagerHomePage> {
               padding: const EdgeInsets.all(16.0),
               child: isLoading || rootNode == null
                   ? const Center(child: CircularProgressIndicator())
-                  : (searchQuery.isNotEmpty && searchedFiles.isEmpty)
-                  ? const Center(child: Text('No results found'))
                   : ListView(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      children: searchQuery.isNotEmpty
-                          ? _buildNodes(searchedFiles)
-                          : _buildNodes(rootNode!.children),
+                      children: _buildNodes(rootNode!.children),
                     ),
             ),
           ),
@@ -1059,7 +1040,6 @@ class _FileManagerHomePageState extends State<FileManagerHomePage> {
                   content: Text(
                     'Git: ${gitResult['command']} → ${gitResult['output']}',
                   ),
-                  duration: Duration(seconds: 4),
                 ),
               );
             }
