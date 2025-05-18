@@ -25,11 +25,15 @@ def get_command_from_ollama(transcription):
         "when i am saying delete the content don't delete full file just delete the content."
         "if the transciption is right i am taking about write"
         "If it's a GitHub command:\n"
-        "- Username: Ragnarok04\n"
-        "- Email: prateekrathi0410@gmail.com\n"
-        "- Use SSH (SHA256:IK+lzexpDuDg2ciD/UVrvwdBt6MNNiX3b8mW101nxAo)\n"
-        "- DO NOT include --key or SSH key flags in the command\n"
-        "- Use simple git commands like: git add ., git commit -m '...', git push origin main\n"
+        "- My GitHub username is Ragnarok04\n"
+        "- My email is prateekrathi0410@gmail.com\n"
+        "- Use SSH URLs only (git@github.com:...)\n"
+        "- Do NOT use https:// in Git commands\n"
+        "- Assume SSH is already set up\n"
+        "- Do NOT include any SSH key flags like --key or anything else\n"
+        "- Use commands like: git add ., git commit -m '...', git push origin main\n"
+        "- The repository for this project is: git@github.com:Ragnarok04/flutter_application_1.git"
+        "- The default branch name is 'main', NOT 'master'."
         )
 
     response = ollama.chat(
