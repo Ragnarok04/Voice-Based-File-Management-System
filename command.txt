@@ -1,1 +1,1 @@
-git push -u git@github.com:Ragnarok04/flutter_application_1.git master
+git add . && git commit -m 'Posh this project to my GitHub account' && git push origin main

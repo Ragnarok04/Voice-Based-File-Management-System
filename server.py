@@ -210,7 +210,7 @@ def execute_transcription_route():
 
 @app.route('/execute-git', methods=['POST'])
 def execute_git():
-    repo_path = 'https://github.com/Ragnarok04/flutter_application_1'  # or wherever your repo is checked out
+    repo_path = 'https://github.com/Ragnarok04/flutter_application_2'  # or wherever your repo is checked out
     # 1) Record & transcribe (reuse your demmo.py)
     try:
         subprocess.run(["python", "demmo.py"], check=True)

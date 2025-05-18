@@ -29,10 +29,10 @@ def get_command_from_ollama(transcription):
         "- My email is prateekrathi0410@gmail.com\n"
         "- Use SSH URLs only (git@github.com:...)\n"
         "- Do NOT use https:// in Git commands\n"
-        "- Assume SSH is already set up\n"
+        "- SSH = SHA256:dNm3vWzZ5D/5cpHq7zpsnZuoZ4U3qIn1knNwc+xhxYM\n"
         "- Do NOT include any SSH key flags like --key or anything else\n"
         "- Use commands like: git add ., git commit -m '...', git push origin main\n"
-        "- The repository for this project is: git@github.com:Ragnarok04/flutter_application_1.git"
+        "- The repository for this project is: git@github.com:Ragnarok04/flutter_application_2.git"
         "- The default branch name is 'main', NOT 'master'."
         )
 
