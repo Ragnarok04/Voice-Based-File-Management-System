@@ -52,6 +52,38 @@ The Voice-Based File Management System follows a modular client-server architect
   - Logs all commands for auditing/debugging.
 
 ---
+---
+
+## 🛠️ Local Installation & Setup Instructions
+
+The following steps will help you run the Voice-Based File Management System on your local machine.
+
+### 🧾 Prerequisites
+
+Ensure you have the following software and hardware available:
+
+#### System Requirements
+- OS: macOS, Linux (preferred), or Windows with WSL2
+- RAM: Minimum 8 GB (for smooth Whisper inference)
+- CPU: 64-bit processor (M1/M2 support for `whisper.cpp`)
+- Git & SSH set up (for Git operations)
+
+#### Software Dependencies
+| Component       | Requirement                          |
+|----------------|---------------------------------------|
+| Python          | 3.8 or higher                         |
+| Flutter         | Stable channel (3.x or higher)        |
+| pip             | Latest version recommended            |
+| whisper.cpp     | (Optional) For local Whisper support  |
+| Ollama          | Installed and running locally         |
+
+---
+
+### 🗂️ Clone the Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/voice-file-manager.git
+cd voice-file-manager
 
 ## 📊 System Flow (End-to-End)
 
