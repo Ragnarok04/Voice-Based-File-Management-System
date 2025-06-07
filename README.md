@@ -1,4 +1,4 @@
-## 🧩 System Architecture
+##  System Architecture
 
 > Developed by [Ragnarok04](https://github.com/Ragnarok04), [KingCrimson711](https://github.com/KingCrimson711), and Pranjal Agrawal.
 
@@ -53,11 +53,11 @@ The Voice-Based File Management System follows a modular client-server architect
 
 ---
 
-## 🛠️ Local Installation & Setup Instructions
+## Local Installation & Setup Instructions
 
 The following steps will help you run the Voice-Based File Management System on your local machine.
 
-### 🧾 Prerequisites
+###  Prerequisites
 
 Ensure you have the following software and hardware available:
 
@@ -81,7 +81,7 @@ Ensure you have the following software and hardware available:
 
 ---
 
-### 🗂️ Clone the Repository
+### Clone the Repository
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/voice-file-manager.git
